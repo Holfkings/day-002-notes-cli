@@ -1,89 +1,87 @@
-# Sistema de Notas CLI
+# Notes CLI System
 
-Aplicación de línea de comandos para tomar notas rápidas, organizarlas con
-etiquetas y buscarlas después. Usa SQLite para almacenamiento local.
+A command-line application for taking quick notes, organizing them with tags, and searching them later. Uses SQLite for local storage.
 
-**Repo del reto:** [Día 002/100 del Reto #100Días](https://github.com/Holfkings)
-
----
-
-## Qué hace
-
-- Crear notas con uno o varios tags
-- Listar notas (con filtro por días y límite)
-- Buscar notas por texto o por etiqueta
-- Borrar notas
-- Listar todas las etiquetas
-
-No requiere servidor, no requiere configuración — usa una base de datos
-SQLite local en `~/.notes_cli/notes.db`.
+**Challenge repo:** [Day 002/100 of the #100Days Challenge](https://github.com/Holfkings)
 
 ---
 
-## Instalación
+## What it does
 
-No requiere instalación. Solo necesitas Python 3.14+:
+- Create notes with one or multiple tags
+- List notes (with filter by days and limit)
+- Search notes by text or by tag
+- Delete notes
+- List all tags
+
+No server required, no configuration needed — uses a local SQLite database at `~/.notes_cli/notes.db`.
+
+---
+
+## Installation
+
+No installation needed. Just Python 3.14+:
 
 ```bash
-# Clonar o descargar los archivos
+# Clone or download the files
 git clone https://github.com/Holfkings/day-002-notes-cli.git
 cd day-002-notes-cli
 
-# La base de datos se crea automáticamente al primer uso
+# The database is created automatically on first use
 ```
 
 ---
 
-## Uso
+## Usage
 
-El comando principal es `notes.py`. Ejecutalo con `python3 notes.py`.
+The main command is `notes.py`. Run it with `python3 notes.py`.
 
-### Agregar una nota
+### Add a note
 
 ```bash
-python3 notes.py add "Comprar leche en el súper" --tags casa,compras
-python3 notes.py add "Reunión con Juan a las 3pm" --tags trabajo,urgente
+python3 notes.py add "Buy milk at the supermarket" --tags home,shopping
+python3 notes.py add "Meeting with Juan at 3pm" --tags work,urgent
 ```
 
-### Listar notas
+### List notes
 
 ```bash
-# Todas las notas (máximo 50)
+# All notes (maximum 50)
 python3 notes.py list
 
-# Solo las de los últimos 7 días
+# Only notes from the last 7 days
 python3 notes.py list --days 7
 
-# Limitar resultados
+# Limit results
 python3 notes.py list --limit 10
 ```
 
-### Buscar notas
+### Search notes
 
 ```bash
-# Por texto
-python3 notes.py search "leche"
+# By text
+python3 notes.py search "milk"
 
-# Por etiqueta
-python3 notes.py search --tag trabajo
+# By tag
+python3 notes.py search --tag work
 
-# Combinado: texto + etiqueta
-python3 notes.py search "Reunión" --tag trabajo
+# Combined: text + tag
+python3 notes.py search "Meeting" --tag work
 ```
 
-### Ver una nota específica
+### View a specific note
 
 ```bash
 python3 notes.py show 5
 ```
 
-### Borrar una nota
+### Delete a note
 
 ```bash
 python3 notes.py delete 5
 ```
 
-### Ver todas las etiquetas
+### View all tags
 
 ```bash
 python3 notes.py tags
@@ -91,56 +89,49 @@ python3 notes.py tags
 
 ---
 
-## Comandos disponibles
+## Available commands
 
-| Comando | Descripción |
+| Command | Description |
 |---------|-------------|
-| `add`   | Agregar una nueva nota |
-| `list`  | Listar notas existentes |
-| `search`| Buscar notas por texto o etiqueta |
-| `show`  | Mostrar una nota por su ID |
-| `delete`| Borrar una nota por su ID |
-| `tags`  | Listar todas las etiquetas |
+| `add`   | Add a new note |
+| `list`  | List existing notes |
+| `search`| Search notes by text or tag |
+| `show`  | Show a note by its ID |
+| `delete`| Delete a note by its ID |
+| `tags`  | List all tags |
 
 ---
 
-## Formato del archivo .deploy
+## Technical stack
 
-El sistema usa una base de datos SQLite local. No hay archivos de
-configuración por fuera del código.
-
----
-
-## Stack técnico
-
-- **Python 3.14+** — stdlib only, sin dependencias externas
-- **SQLite** — base de datos embebida, viene con Python
-- **argparse** — CLI built-in de Python
+- **Python 3.14+** — stdlib only, no external dependencies
+- **SQLite** — embedded database, comes with Python
+- **argparse** — Python's built-in CLI
 
 ---
 
-## Estructura del proyecto
+## Project structure
 
 ```
 day-002-notes-cli/
-├── notes.py           # CLI principal (argparse)
-├── storage.py         # Capa de datos (SQLite)
+├── notes.py           # Main CLI (argparse)
+├── storage.py         # Data layer (SQLite)
 ├── tests/
-│   └── test_notes.py  # Tests automatizados (pytest)
+│   └── test_notes.py  # Automated tests (pytest)
 ├── .gitignore
 └── README.md
 ```
 
-Módulos:
-- `storage.py` — todo lo relacionado con la base de datos:
-  - `init_db()` — crea las tablas
-  - `add_note()` — crea una nota
-  - `list_notes()` — lista notas con filtros
-  - `search_notes()` — busca por texto o etiqueta
-  - `delete_note()` — borra una nota
-  - `get_note_by_id()` — obtiene una nota individual
+Modules:
+- `storage.py` — everything related to the database:
+  - `init_db()` — creates the tables
+  - `add_note()` — creates a note
+  - `list_notes()` — lists notes with filters
+  - `search_notes()` — searches by text or tag
+  - `delete_note()` — deletes a note
+  - `get_note_by_id()` — gets an individual note
 
-- `notes.py` — CLI con subcomandos:
+- `notes.py` — CLI with subcommands:
   - `add`, `list`, `search`, `show`, `delete`, `tags`
 
 ---
@@ -148,33 +139,32 @@ Módulos:
 ## Tests
 
 ```bash
-# Ejecutar todos los tests
+# Run all tests
 python3 -m pytest tests/ -v
 
-# Ejecutar un test específico
-python3 -m pytest tests/test_notes.py::TestSearchNotes::test_buscar_por_texto -v
+# Run a specific test
+python3 -m pytest tests/test_notes.py::TestSearchNotes::test_search_by_text -v
 ```
 
-Los tests usan una base de datos temporal para no afectar los datos reales.
+Tests use a temporary database to avoid affecting real data.
 
 ---
 
-## Limitaciones conocidas
+## Known limitations
 
-- La búsqueda por texto usa `LIKE '%termino%'` — es case-insensitive pero
-  no soporta búsqueda fuzzy o por expresiones regulares.
-- No hay edición de notas existentes (solo create/read/search/delete).
-- No hay sincronización entre dispositivos — es totalmente local.
-- Los tags no se eliminan aunque ninguna nota los use.
+- Text search uses `LIKE '%term%'` — it is case-insensitive but does not support fuzzy search or regular expressions.
+- No editing of existing notes (only create/read/search/delete).
+- No synchronization between devices — fully local.
+- Tags are not deleted even if no notes use them.
 
 ---
 
-## Para el Día 003 (posible continuación)
+## For Day 003 (possible continuation)
 
-Si se continúa este proyecto, se podrían agregar:
-- Editar notas existentes (`notes edit <id> "nuevo contenido"`)
-- Exportar a Markdown
-- Importar desde archivo de texto
-- Modo interactivo (REPL)
-- Filtro por rango de fechas
-- Ordenamiento por fecha, por tags, etc.
+If this project continues, possible additions:
+- Edit existing notes (`notes edit <id> "new content"`)
+- Export to Markdown
+- Import from text file
+- Interactive mode (REPL)
+- Filter by date range
+- Sort by date, by tags, etc.
